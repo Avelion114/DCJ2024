@@ -3,11 +3,12 @@
 
 #include "GridPawnMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/GameplayMessageSubsystem.h"
+#include "Audio/AudioHelperData.h"
 #include "DungeonCrawlerGameInstance.h"
 
 UGridPawnMovementComponent::UGridPawnMovementComponent()
 {
-
 }
 
 void UGridPawnMovementComponent::Move(float AxisValue)
@@ -31,8 +32,6 @@ void UGridPawnMovementComponent::Move(float AxisValue)
 
 void UGridPawnMovementComponent::Rotate(float AxisValue)
 {
-	
-
 	if (MovementState == EGridMovementState::Idle && AxisValue != 0.0f)
 	{
 		StartRotation = PawnOwner->GetControlRotation();
@@ -42,6 +41,7 @@ void UGridPawnMovementComponent::Rotate(float AxisValue)
 		SetMovementState(EGridMovementState::Turning);
 	}
 }
+
 
 void UGridPawnMovementComponent::BeginPlay()
 {
@@ -53,6 +53,7 @@ void UGridPawnMovementComponent::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("Player Start: X-%i Y-%i"), Coordinates.X, Coordinates.Y);
 	if (!Found) { UE_LOG(LogTemp, Error, TEXT("Player Start not found!")); }
 
+
 }
 
 void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
@@ -61,6 +62,15 @@ void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 	{
 	case EGridMovementState::Idle:
 		MovementAlpha = 0.0f;
+		break;
+	case EGridMovementState::Moving:
+		//send message to audio that you have moved to a new grid
+		UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+		FGameplayTag ChannelTag = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Moved");
+		FAxSendMsg_PlyrSfx OutgoingMessage;
+		OutgoingMessage.Float = 0.f;
+		OutgoingMessage.Int = 0;
+		MessageSubsystem.BroadcastMessage(ChannelTag, OutgoingMessage);
 		break;
 	}
 	MovementState = NewState;
