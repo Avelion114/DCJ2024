@@ -3,6 +3,7 @@
 
 #include "GridPawnMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "DungeonCrawlerGameInstance.h"
 
 UGridPawnMovementComponent::UGridPawnMovementComponent()
 {
@@ -17,12 +18,14 @@ void UGridPawnMovementComponent::Move(float AxisValue)
 
 		//Get grid system for next location and set target location
 
-
-		//
-		StartLocation = PawnOwner->GetActorLocation();
-		TargetLocation = StartLocation + (PawnOwner->GetActorForwardVector() * AxisValue) * GridSize;
-
-		SetMovementState(EGridMovementState::Moving);
+		UDungeonCrawlerGameInstance* GI = Cast<UDungeonCrawlerGameInstance>(GetWorld()->GetGameInstance());
+		FIntPoint TileCoord;
+		if (GI->IsValidMovement(Coordinates, TileCoord, Orientation, TargetLocation))
+		{
+			StartLocation = PawnOwner->GetActorLocation();
+			Coordinates = TileCoord;
+			SetMovementState(EGridMovementState::Moving);
+		}
 	}
 }
 
@@ -35,9 +38,21 @@ void UGridPawnMovementComponent::Rotate(float AxisValue)
 		StartRotation = PawnOwner->GetControlRotation();
 		TargetRotation = StartRotation;
 		TargetRotation.Yaw += float(90.0 * AxisValue);
-
+		AddOrientation(AxisValue > 0);
 		SetMovementState(EGridMovementState::Turning);
 	}
+}
+
+void UGridPawnMovementComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UDungeonCrawlerGameInstance* GI = Cast<UDungeonCrawlerGameInstance>(GetWorld()->GetGameInstance());
+	bool Found = false;
+	Coordinates = GI->FindPlayerStart(Found);
+	UE_LOG(LogTemp, Warning, TEXT("Player Start: X-%i Y-%i"), Coordinates.X, Coordinates.Y);
+	if (!Found) { UE_LOG(LogTemp, Error, TEXT("Player Start not found!")); }
+
 }
 
 void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
@@ -49,6 +64,16 @@ void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 		break;
 	}
 	MovementState = NewState;
+}
+
+void UGridPawnMovementComponent::AddOrientation(bool Right)
+{
+	Orientation += Right ? 1 : -1;
+	UE_LOG(LogTemp, Warning, TEXT("Orientation: %i"), Orientation);
+	if (Orientation > 3) { Orientation = 0; return; }
+	if (Orientation < 0) { Orientation = 3; return; }
+
+
 }
 
 void UGridPawnMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

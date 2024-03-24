@@ -37,7 +37,11 @@ public:
 
 protected:
 
+	virtual void BeginPlay() override;
+
 	virtual void SetMovementState(EGridMovementState NewState);
+	void AddOrientation(bool Right);
+
 
 public:
 
@@ -49,6 +53,11 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Testing)
 	float GridSize = 100;
+
+protected:
+
+	FIntPoint Coordinates;
+	int32 Orientation = 0;
 
 private:
 
