@@ -57,4 +57,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntPoint, FGridSpaceData> GridSpaces;
 
+
+
 };

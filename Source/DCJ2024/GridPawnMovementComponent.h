@@ -10,6 +10,7 @@
  * 
  */
 
+class UDcjAudioGiSubsystem;
 
 UENUM()
 enum class EGridMovementState {
@@ -72,4 +73,5 @@ private:
 
 	float MovementAlpha = 0.0f;
 
+	UDcjAudioGiSubsystem* DcjAudioGiSubsystem;
 };
