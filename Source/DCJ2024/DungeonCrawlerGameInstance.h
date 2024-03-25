@@ -50,11 +50,13 @@ public:
 	FIntPoint FindPlayerStart(bool& Found);
 
 	UFUNCTION(BlueprintCallable)
-	bool IsValidMovement(FIntPoint PawnCoordinate, FIntPoint& NewCoordinate, int32 Orientation, FVector& Target);
+	bool IsValidMovement(FIntPoint PawnCoordinate, FIntPoint& NewCoordinate, FIntPoint Direction, int32 Orientation, FVector& Target);
 
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntPoint, FGridSpaceData> GridSpaces;
+
+
 
 };

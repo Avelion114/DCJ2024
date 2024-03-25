@@ -10,6 +10,7 @@
  * 
  */
 
+class UDcjAudioGiSubsystem;
 
 UENUM()
 enum class EGridMovementState {
@@ -28,7 +29,7 @@ public:
 	UGridPawnMovementComponent();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Move(float AxisValue);
+	virtual void Move(FIntPoint AxisValue);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Rotate(float AxisValue);
@@ -72,4 +73,5 @@ private:
 
 	float MovementAlpha = 0.0f;
 
+	UDcjAudioGiSubsystem* DcjAudioGiSubsystem;
 };
