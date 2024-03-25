@@ -18,9 +18,9 @@ FIntPoint UDungeonCrawlerGameInstance::FindPlayerStart(bool& Found)
 	return FIntPoint{ -1,-1 };
 }
 
-bool UDungeonCrawlerGameInstance::IsValidMovement(FIntPoint PawnCoordinate, FIntPoint& NewCoordinate, int32 Orientation, FVector& Target)
+bool UDungeonCrawlerGameInstance::IsValidMovement(FIntPoint PawnCoordinate, FIntPoint& NewCoordinate, FIntPoint Direction, int32 Orientation, FVector& Target)
 {
-	FIntPoint NextCoord;
+	FIntPoint NextCoord = { 0,0 };
 
 	switch (Orientation)
 	{
@@ -38,13 +38,25 @@ bool UDungeonCrawlerGameInstance::IsValidMovement(FIntPoint PawnCoordinate, FInt
 		break;
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("NextCoordinate: X-%i Y-%i"), NextCoord.X, NextCoord.Y);
+	if (Direction.X == 0)
+	{
+		if (NextCoord.X == 0)
+		{
+			Swap(Direction.X, Direction.Y);
+			NextCoord = Direction * -NextCoord.Y;
+		}
+		else
+		{
+			NextCoord = Direction * NextCoord.X;
+		}
+	}
+	else { NextCoord *= Direction.X; }
+
+	UE_LOG(LogTemp, Warning, TEXT("NextCoordinate: X-%i Y-%i"), NextCoord.X, NextCoord.Y);
 	NewCoordinate = NextCoord + PawnCoordinate;
 	FGridSpaceData* Data = GridSpaces.Find(NewCoordinate);
 	if (Data)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NextTile: X:%i Y:%i"), NewCoordinate.X, NewCoordinate.Y);
-
 		Target = Data->WorldLocation;
 		return !Data->Collides;
 	}

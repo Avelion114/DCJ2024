@@ -11,17 +11,17 @@ UGridPawnMovementComponent::UGridPawnMovementComponent()
 {
 }
 
-void UGridPawnMovementComponent::Move(float AxisValue)
+void UGridPawnMovementComponent::Move(FIntPoint AxisValue)
 {
 
-	if (MovementState == EGridMovementState::Idle && AxisValue != 0.0f)
+	if (MovementState == EGridMovementState::Idle && AxisValue.Size() != 0.0f)
 	{
 
 		//Get grid system for next location and set target location
 
 		UDungeonCrawlerGameInstance* GI = Cast<UDungeonCrawlerGameInstance>(GetWorld()->GetGameInstance());
 		FIntPoint TileCoord;
-		if (GI->IsValidMovement(Coordinates, TileCoord, Orientation, TargetLocation))
+		if (GI->IsValidMovement(Coordinates, TileCoord, AxisValue, Orientation, TargetLocation))
 		{
 			StartLocation = PawnOwner->GetActorLocation();
 			Coordinates = TileCoord;
