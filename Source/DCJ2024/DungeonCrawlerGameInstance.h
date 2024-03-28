@@ -10,6 +10,8 @@
  * 
  */
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartUp);
+
 USTRUCT(BlueprintType)
 struct FGridSpaceData
 {
@@ -53,6 +55,9 @@ public:
 	bool IsValidMovement(FIntPoint PawnCoordinate, FIntPoint& NewCoordinate, FIntPoint Direction, int32 Orientation, FVector& Target);
 
 public:
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnStartUp StartupDelegate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntPoint, FGridSpaceData> GridSpaces;
