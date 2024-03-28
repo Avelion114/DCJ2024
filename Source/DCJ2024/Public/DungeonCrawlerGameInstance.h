@@ -38,7 +38,13 @@ struct FGridSpaceData
 		}
 		return false;
 	}
+
+	int32 GCost = 0;
+	int32 HCost = 0;
+
+	int32 GetFCost() { return GCost + HCost; }
 };
+
 
 UCLASS()
 class DCJ2024_API UDungeonCrawlerGameInstance : public UGameInstance
