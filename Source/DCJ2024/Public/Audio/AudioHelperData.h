@@ -31,3 +31,30 @@ struct FAxSendMsg_PlyrSfx
     float Float = 0.f;
 
 };
+
+//used for sending player specific messages
+USTRUCT(BlueprintType)
+struct FGPM_Generic
+{
+    GENERATED_BODY()
+
+    // Struct members
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
+    int32 Int = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
+    float Float = 0.f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
+    bool Bool = false;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
+    FVector Vector;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
+    AActor* Actor;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
+    FGameplayTag GameplayTag;
+
+};

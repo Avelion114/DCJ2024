@@ -19,13 +19,7 @@ struct FGridSpaceData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool Collides;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector WorldLocation;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AActor* Actor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FName> Tags;
