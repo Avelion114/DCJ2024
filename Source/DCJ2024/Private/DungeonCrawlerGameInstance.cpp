@@ -58,7 +58,7 @@ bool UDungeonCrawlerGameInstance::IsValidMovement(FIntPoint PawnCoordinate, FInt
 	if (Data)
 	{
 		Target = Data->WorldLocation;
-		return !Data->Collides;
+		return true;
 	}
 	return false;
 }
