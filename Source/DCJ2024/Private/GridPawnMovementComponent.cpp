@@ -10,7 +10,6 @@
 UGridPawnMovementComponent::UGridPawnMovementComponent()
 {
 
-
 }
 
 void UGridPawnMovementComponent::Move(FIntPoint AxisValue)
@@ -65,6 +64,11 @@ void UGridPawnMovementComponent::BeginPlay()
 
 void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 {
+	UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+	FAxSendMsg_PlyrSfx OutgoingMessage;
+	FGameplayTag ChannelTag_Moving = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Moved");
+	FGameplayTag ChannelTag_Turning = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Turned");
+
 	switch (NewState)
 	{
 	case EGridMovementState::Idle:
@@ -72,13 +76,11 @@ void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 		break;
 	case EGridMovementState::Moving:
 		//send message to audio that you have moved to a new grid
-		UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
-		FGameplayTag ChannelTag = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Moved");
-		FAxSendMsg_PlyrSfx OutgoingMessage;
-		OutgoingMessage.Float = 0.f;
-		OutgoingMessage.Int = 0;
-		MessageSubsystem.BroadcastMessage(ChannelTag, OutgoingMessage);
+		MessageSubsystem.BroadcastMessage(ChannelTag_Moving, OutgoingMessage);
 		break;
+	case EGridMovementState::Turning:
+		//send message to audio that you have turned
+		MessageSubsystem.BroadcastMessage(ChannelTag_Turning, OutgoingMessage);
 	}
 	MovementState = NewState;
 }
