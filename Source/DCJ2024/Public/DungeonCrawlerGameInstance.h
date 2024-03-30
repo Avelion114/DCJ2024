@@ -24,6 +24,12 @@ struct FGridSpaceData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FName> Tags;
 
+
+	int32 GCost = 0;
+	int32 HCost = 0;
+
+	FIntPoint Parent = { -1,-1 };
+
 	bool HasTag(FName Tag)
 	{
 		for (auto T : Tags)
@@ -33,10 +39,22 @@ struct FGridSpaceData
 		return false;
 	}
 
-	int32 GCost = 0;
-	int32 HCost = 0;
-
 	int32 GetFCost() { return GCost + HCost; }
+
+	void ResetCost()
+	{
+		GCost = 0;
+		HCost = 0;
+	}
+
+	bool operator< (FGridSpaceData B)
+	{
+		if (GetFCost() == B.GetFCost())
+		{
+			return HCost < B.HCost;
+		}
+		return GetFCost() < B.GetFCost();
+	}
 };
 
 
@@ -61,6 +79,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FIntPoint, FGridSpaceData> GridSpaces;
+
+	void ResetCostData();
 
 
 

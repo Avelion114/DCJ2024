@@ -17,8 +17,9 @@ class DCJ2024_API AGridAIController : public AAIController
 	GENERATED_BODY()
 
 public:
-
-	TArray<FIntPoint> GetPathToLocation(FIntPoint Location);
+	
+	UFUNCTION(BlueprintCallable)
+	TArray<FIntPoint> GetPathToLocation(FIntPoint Start, FIntPoint Target);
 
 public:
 
