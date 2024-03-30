@@ -62,3 +62,13 @@ bool UDungeonCrawlerGameInstance::IsValidMovement(FIntPoint PawnCoordinate, FInt
 	}
 	return false;
 }
+
+void UDungeonCrawlerGameInstance::ResetCostData()
+{
+	TArray<FGridSpaceData> Values;
+	GridSpaces.GenerateValueArray(Values);
+	for (auto I : Values)
+	{
+		I.ResetCost();
+	}
+}
