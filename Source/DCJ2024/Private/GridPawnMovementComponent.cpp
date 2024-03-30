@@ -45,13 +45,26 @@ void UGridPawnMovementComponent::Rotate(float AxisValue)
 
 void UGridPawnMovementComponent::SetPlayerStart()
 {
-	UDungeonCrawlerGameInstance* GI = Cast<UDungeonCrawlerGameInstance>(GetWorld()->GetGameInstance());
-	bool Found = false;
-	Coordinates = GI->FindPlayerStart(Found);
-	UE_LOG(LogTemp, Warning, TEXT("Player Start: X-%i Y-%i"), Coordinates.X, Coordinates.Y);
-	if (!Found) { UE_LOG(LogTemp, Error, TEXT("Player Start not found!")); }
-	GetPawnOwner()->SetActorLocation(GI->GridSpaces.Find(Coordinates)->WorldLocation);
-	GetPawnOwner()->GetController()->SetControlRotation({ 0.0f,0.0f,0.0f });
+	if (PawnType == EGridPawnType::Player)
+	{
+		UDungeonCrawlerGameInstance* GI = Cast<UDungeonCrawlerGameInstance>(GetWorld()->GetGameInstance());
+		bool Found = false;
+		Coordinates = GI->FindPlayerStart(Found);
+		UE_LOG(LogTemp, Warning, TEXT("Player Start: X-%i Y-%i"), Coordinates.X, Coordinates.Y);
+		if (!Found) { UE_LOG(LogTemp, Error, TEXT("Player Start not found!")); }
+		GetPawnOwner()->SetActorLocation(GI->GridSpaces.Find(Coordinates)->WorldLocation);
+		GetPawnOwner()->GetController()->SetControlRotation({ 0.0f,0.0f,0.0f });
+	}
+}
+
+void UGridPawnMovementComponent::SetCoordinates(FIntPoint New)
+{
+	Coordinates = New;
+}
+
+FIntPoint UGridPawnMovementComponent::GetCoordinates()
+{
+	return Coordinates;
 }
 
 
@@ -112,6 +125,7 @@ void UGridPawnMovementComponent::TickComponent(float DeltaTime, ELevelTick TickT
 		if (MovementAlpha == 1.0)
 		{
 			SetMovementState(EGridMovementState::Idle);
+			MoveComplete.Broadcast();
 		}
 		break;
 	case EGridMovementState::Turning:
