@@ -12,11 +12,19 @@
 
 class UDcjAudioGiSubsystem;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementComplete);
+
 UENUM()
 enum class EGridMovementState {
 	Idle = 0,
 	Moving,
 	Turning
+};
+
+UENUM()
+enum class EGridPawnType {
+	Player = 0,
+	AI
 };
 
 UCLASS(ClassGroup = Movement, meta = (BlueprintSpawnableComponent))
@@ -39,6 +47,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerStart();
 
+	UFUNCTION(BlueprintCallable)
+	void SetCoordinates(FIntPoint New);
+
+	UFUNCTION(BlueprintCallable)
+	FIntPoint GetCoordinates();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -55,8 +69,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = Movement)
 	float TurnSpeed = 10.0f;
 
-	UPROPERTY(EditAnywhere, Category = Testing)
+	UPROPERTY(EditAnywhere, Category = Movement)
 	float GridSize = 100;
+
+	UPROPERTY(EditAnywhere, Category = Movement)
+	EGridPawnType PawnType;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnMovementComplete MoveComplete;
 
 protected:
 
