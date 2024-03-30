@@ -12,7 +12,7 @@ UGridPawnMovementComponent::UGridPawnMovementComponent()
 
 }
 
-void UGridPawnMovementComponent::Move(FIntPoint AxisValue)
+bool UGridPawnMovementComponent::Move(FIntPoint AxisValue)
 {
 
 	if (MovementState == EGridMovementState::Idle && AxisValue.Size() != 0.0f)
@@ -27,8 +27,14 @@ void UGridPawnMovementComponent::Move(FIntPoint AxisValue)
 			StartLocation = PawnOwner->GetActorLocation();
 			Coordinates = TileCoord;
 			SetMovementState(EGridMovementState::Moving);
+			return true;
 		}
+		UE_LOG(LogTemp, Warning, TEXT("Invalid Movement"));
+		return false;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Movement State is not Idle"));
+	return false;
+
 }
 
 void UGridPawnMovementComponent::Rotate(float AxisValue)
@@ -82,6 +88,7 @@ void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 	FGameplayTag ChannelTag_Moving = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Moved");
 	FGameplayTag ChannelTag_Turning = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Turned");
 
+	MovementState = NewState;
 	switch (NewState)
 	{
 	case EGridMovementState::Idle:
@@ -95,7 +102,7 @@ void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 		//send message to audio that you have turned
 		MessageSubsystem.BroadcastMessage(ChannelTag_Turning, OutgoingMessage);
 	}
-	MovementState = NewState;
+	
 }
 
 void UGridPawnMovementComponent::AddOrientation(bool Right)

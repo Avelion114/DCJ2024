@@ -37,7 +37,7 @@ public:
 	UGridPawnMovementComponent();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Move(FIntPoint AxisValue);
+	virtual bool Move(FIntPoint AxisValue);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Rotate(float AxisValue);
@@ -50,7 +50,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCoordinates(FIntPoint New);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FIntPoint GetCoordinates();
 
 protected:
