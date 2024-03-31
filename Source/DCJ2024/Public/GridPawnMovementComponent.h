@@ -14,15 +14,15 @@ class UDcjAudioGiSubsystem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementComplete);
 
-UENUM()
-enum class EGridMovementState {
+UENUM(BlueprintType)
+enum class EGridMovementState : uint8 {
 	Idle = 0,
 	Moving,
 	Turning
 };
 
-UENUM()
-enum class EGridPawnType {
+UENUM(BlueprintType)
+enum class EGridPawnType : uint8 {
 	Player = 0,
 	AI
 };
@@ -53,11 +53,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FIntPoint GetCoordinates();
 
+	UFUNCTION(BlueprintCallable)
+	virtual void SetMovementState(EGridMovementState NewState);
+
 protected:
 
 	virtual void BeginPlay() override;
 
-	virtual void SetMovementState(EGridMovementState NewState);
+	
 	void AddOrientation(bool Right);
 
 
