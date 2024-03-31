@@ -39,7 +39,7 @@ struct FGridSpaceData
 		return false;
 	}
 
-	int32 GetFCost() { return GCost + HCost; }
+	int32 GetFCost() const { return GCost + HCost; }
 
 	void ResetCost()
 	{
@@ -47,7 +47,7 @@ struct FGridSpaceData
 		HCost = 0;
 	}
 
-	bool operator< (FGridSpaceData B)
+	bool operator< (const FGridSpaceData& B)
 	{
 		if (GetFCost() == B.GetFCost())
 		{

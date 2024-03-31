@@ -19,15 +19,24 @@ TArray<FIntPoint> AGridAIController::GetPathToLocation(FIntPoint Start, FIntPoin
 	while (true)
 	{
 		//Sort the OpenNodes array by the GridSpace with the lowest F or H Cost
-		TSortedMap<FGridSpaceData*, FIntPoint> Data;
-		for (auto I : OpenNodes)
+		int32 Lowest = 0;
+		for (int32 i = 0; i < OpenNodes.Num(); i++)
 		{
-			Data.Add(GI->GridSpaces.Find(I), I);
+			if (*GI->GridSpaces.Find(OpenNodes[i]) < *GI->GridSpaces.Find(OpenNodes[Lowest]))
+			{
+				Lowest = i;
+			}
 		}
 
-		Data.GenerateValueArray(OpenNodes);
+		UE_LOG(LogTemp, Error, TEXT("Lowest: %i"), Lowest);
 
-		FIntPoint Current = OpenNodes[0];
+		for (auto I : OpenNodes)
+		{
+			auto G = GI->GridSpaces.Find(I);
+			UE_LOG(LogTemp, Warning, TEXT("Point: %s, G: %i, H: %i, F: %i"), *I.ToString(), G->GCost, G->HCost, G->GetFCost());
+		}
+
+		FIntPoint Current = OpenNodes[Lowest];
 		ClosedNodes.Add(Current);
 		OpenNodes.Remove(Current);
 
@@ -55,11 +64,11 @@ TArray<FIntPoint> AGridAIController::GetPathToLocation(FIntPoint Start, FIntPoin
 		{
 			if (ClosedNodes.Find(G) == INDEX_NONE)
 			{
-				FIntPoint Diff = FIntPoint{ FMath::Abs(G.X - Start.X), FMath::Abs(G.Y - Start.Y) };
-				GI->GridSpaces[G].GCost = Diff.X + Diff.Y;
+				FIntPoint Diff = FIntPoint{ FMath::Abs(G.X - Target.X), FMath::Abs(G.Y - Target.Y) };
+				GI->GridSpaces[G].HCost = Diff.X + Diff.Y;
 
 				Diff = FIntPoint{ FMath::Abs(G.X - Current.X), FMath::Abs(G.Y - Current.Y) };
-				GI->GridSpaces[G].HCost = GI->GridSpaces.Find(Current)->HCost + (Diff.X + Diff.Y);
+				GI->GridSpaces[G].GCost = GI->GridSpaces.Find(Current)->GCost + (Diff.X + Diff.Y);
 
 				GI->GridSpaces[G].Parent = Current;
 				OpenNodes.Add(G);
