@@ -2,8 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "GameplayTagContainer.h"
-#include "GameFramework/GameplayMessageSubsystem.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
@@ -54,7 +52,5 @@ struct FGPM_Generic
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
     AActor* Actor;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ax Send Gpm Player Sfx")
-    FGameplayTag GameplayTag;
 
 };

@@ -49,10 +49,6 @@
 		{
 			"Name": "Soundscape",
 			"Enabled": true
-		},
-		{
-			"Name": "GameplayMessageRouter",
-			"Enabled": true
 		}
 	]
 }

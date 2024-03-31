@@ -3,7 +3,6 @@
 
 #include "GridPawnMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "GameFramework/GameplayMessageSubsystem.h"
 #include "Audio/AudioHelperData.h"
 #include "DungeonCrawlerGameInstance.h"
 
@@ -83,11 +82,6 @@ void UGridPawnMovementComponent::BeginPlay()
 
 void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 {
-	UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
-	FAxSendMsg_PlyrSfx OutgoingMessage;
-	FGameplayTag ChannelTag_Moving = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Moved");
-	FGameplayTag ChannelTag_Turning = FGameplayTag::RequestGameplayTag("GPM.Sfx.Plyr.Turned");
-
 	MovementState = NewState;
 	switch (NewState)
 	{
@@ -97,14 +91,14 @@ void UGridPawnMovementComponent::SetMovementState(EGridMovementState NewState)
 	case EGridMovementState::Moving:
 		//send message to audio that you have moved to a new grid
 		if (PawnType == EGridPawnType::Player) {
-			MessageSubsystem.BroadcastMessage(ChannelTag_Moving, OutgoingMessage);
+			SfxPlayerMoved.Broadcast();
 		}
 		
 		break;
 	case EGridMovementState::Turning:
 		//send message to audio that you have turned
 		if (PawnType == EGridPawnType::Player) {
-			MessageSubsystem.BroadcastMessage(ChannelTag_Turning, OutgoingMessage);
+			SfxPlayerTurned.Broadcast();
 		}
 	}
 	

@@ -13,13 +13,12 @@ public class DCJ2024 : ModuleRules
 			"CoreUObject", 
 			"Engine", 
 			"InputCore", 
-			"EnhancedInput",
-			"BlueprintGraph"});
+			"EnhancedInput"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"GameplayTags",
-            "GameplayTasks",
-            "GameplayMessageRuntime", });
+            "GameplayTasks",});
+
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

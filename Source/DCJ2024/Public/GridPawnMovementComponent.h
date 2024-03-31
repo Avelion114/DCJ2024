@@ -13,6 +13,8 @@
 class UDcjAudioGiSubsystem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementComplete);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerMoved);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerTurned);
 
 UENUM(BlueprintType)
 enum class EGridMovementState : uint8 {
@@ -80,6 +82,11 @@ public:
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnMovementComplete MoveComplete;
+
+	UPROPERTY(BlueprintAssignable)
+	FPlayerMoved SfxPlayerMoved;
+	UPROPERTY(BlueprintAssignable)
+	FPlayerMoved SfxPlayerTurned;
 
 protected:
 
